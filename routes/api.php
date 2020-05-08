@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('register', 'LoginController@register');
-Route::post('login', 'LoginController@login');
+Route::get('test', 'LoginController@test');
+Route::post('user/login', 'LoginController@login')->name('login');
 
-Route::middleware('auth:api')->group(function () {
+/*Route::middleware('auth:api')->group(function () {
     Route::get('/', 'HomeController@index'); //后台首页
-});
+});*/
