@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('test', 'LoginController@test');
+Route::get('test', 'TestController@index');
 Route::post('user/login', 'LoginController@login')->name('login');
 
-/*Route::middleware('auth:api')->group(function () {
-    Route::get('/', 'HomeController@index'); //后台首页
-});*/
+Route::middleware('auth:api')->group(function () {
+    Route::get('user/info', 'UserController@getUserInfo'); //获取用户信息
+});
