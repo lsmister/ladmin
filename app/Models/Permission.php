@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 
 class Permission extends Model
 {
-    public static $menu = [];
+    protected $visible = ['value', 'label', 'children'];
 
     //关联角色 多对多
     public function roles()
@@ -15,52 +15,27 @@ class Permission extends Model
         return $this->belongsToMany(Role::class, 'role_permission');
     }
 
-    public function childrens()
+    public function children()
     {
-        return $this->hasMany(self::class,'parent_id','id')
-            ->select('id', 'parent_id', 'description', 'sort')
+        return $this->hasMany(self::class,'parent_id','value')
+            ->select('id as value', 'description as label','parent_id', 'sort', 'status')
             ->where('status', 1)
             ->orderBy('sort', 'desc')
-            ->with(['childrens']);
+            ->with(['children']);
     }
 
-    //获取所有子级 - 无限级
-    public static function GetAllChildrens($parent_id = 0)
+    //获取权限菜单 - 无限级
+    public static function GetAllMenus($parent_id = 0)
     {
         $arr = self::query()
-            ->select('id', 'parent_id', 'description')
+            ->select('id as value', 'parent_id', 'description as label', 'sort', 'status')
+            ->where('status', 1)
             ->where('parent_id',$parent_id)
-            ->with(['childrens'])
+            ->orderBy('sort', 'desc')
+            ->with(['children'])
             ->get()->toArray();
 
         return $arr;
-    }
-
-    //生成菜单树
-    public static function GetMenuTree($arrs, $level = 0, $menus = [], $de = '')
-    {
-        array_push($menus, $de);
-        if(isset($arrs['childrens'])) {
-            $res = self::GetMenuTree($arrs);
-            array_merge($menus, $res);
-        }
-
-        return $menus;
-        /*$arrlist = self::query()
-            ->select('id', 'parent_id', 'description', 'sort')
-            ->where('parent_id',$parent_id)
-            ->where('status',1)
-            ->orderBy('sort', 'desc')
-            ->get();
-
-        if($arrlist->count() > 0) {
-            foreach ($arrlist as $arr) {
-                $res = self::GetMenuTree($arr->id, $menu);
-                array_push($menu, $res);
-            }
-        }
-
-        return $menu;*/
     }
 
 

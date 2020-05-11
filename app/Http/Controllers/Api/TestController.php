@@ -11,13 +11,7 @@ class TestController extends Controller
 
     public function index(Request $request)
     {
-        $p = Permission::GetMenuTree();
-//        $menu = $p->childrens()->toArray();
-
-//        $p = Permission::find(1);
-//        $data = $p->childrens->toArray();
-//        dd($data);
-
-        dd($p);
+        $arrs = Permission::GetAllMenus();
+        dd(json_encode($arrs));
     }
 }
