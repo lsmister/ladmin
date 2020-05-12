@@ -12,6 +12,7 @@ class TestController extends Controller
     public function index(Request $request)
     {
         $arrs = Permission::GetAllMenus();
-        dd(json_encode($arrs));
+//        dd($arrs);
+        dd(json_encode($arrs, JSON_UNESCAPED_UNICODE));
     }
 }
