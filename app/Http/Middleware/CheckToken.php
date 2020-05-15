@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Permission;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class CheckToken extends BaseMiddleware
@@ -20,7 +21,14 @@ class CheckToken extends BaseMiddleware
 //        $this->checkForToken($request);
 
         //token是否有效, 抛出异常:TokenInvalidException
-//        $this->auth->parseToken()->authenticate();
+        $user = $this->auth->parseToken()->authenticate();
+
+        /*$url = substr($request->path(), 3);
+        $role = $user->role;
+        if(!$role) {
+            echo '没有角色';
+        }
+        Permission::where('url', $url)->first();*/
 
         return $next($request);
     }
