@@ -60,3 +60,4 @@ function md5_sign(array $params, string $key, $keyname = 'key', $is_capital = fa
 
     return $sign;
 }
+
