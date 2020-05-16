@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -50,6 +52,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        //认证异常
+        if($exception instanceof UnauthorizedHttpException) {
+            return response()->json(['code'=>50008, 'message'=>'认证失败']);
+        }elseif ($exception instanceof JWTException){
+            return response()->json(['code'=>50014, 'message'=>'认证失效']);
+        }
+
         return parent::render($request, $exception);
     }
 }

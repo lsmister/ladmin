@@ -4,14 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use Earnp\GoogleAuthenticator\Facades\GoogleAuthenticator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['register', 'login']]);
+    }*/
+
+    public function test(Request $request){
+        $ss = GoogleAuthenticator::CreateSecret();
+        dd($ss);
     }
 
     /***
@@ -55,26 +61,41 @@ class LoginController extends Controller
     {
         $username = $request->username;
         $password = $request->password;
+        $googleCode = $request->googleCode;
 
-        if (!$username || !$password) {
-            return response()->json(['success' => false, 'message' => '账号或密码错误！']);
+        if (empty($username) || empty($password)) {
+            return response()->json(['code' => 40001, 'message' => '账号或密码为必填！']);
         }
 
-        $admin = User::where('username', $username)->first();
-        if (!$admin) {
-            return response()->json(['success' => false, 'message' => '此用户不存在！']);
+        $user = User::where('username', $username)->first();
+        if (!$user) {
+            return response()->json(['code' => 40001, 'message' => '用户不存在！']);
         }
 
-        if (!Hash::check($password, $admin->password)) {
-            return response()->json(['success' => false, 'message' => '密码填写错误！']);
+        if (!Hash::check($password, $user->password)) {
+            return response()->json(['code' => 40001, 'message' => '密码错误！']);
+        }
+
+        if($user->google_status == 1) {
+            if(empty($googleCode)) {
+                return response()->json(['code' => 40001, 'message' => '请输入谷歌验证码！']);
+            }
+            if(GoogleAuthenticator::CheckCode($user->google_secret, $googleCode)) {
+                return response()->json(['code' => 40001, 'message' => '谷歌验证码不正确！']);
+            }
         }
 
         $credentials = request(['username', 'password']);
         if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['code' => 40001, 'message' => '授权失败！']);
         }
 
-        return $this->respondWithToken($token);
+        return response()->json([
+            'code' => 20000,
+            'message' => '登录成功！',
+            'token' => $token,
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
     }
 
     /**
