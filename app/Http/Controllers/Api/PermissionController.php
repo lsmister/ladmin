@@ -10,7 +10,9 @@ class PermissionController extends Controller
 {
     //获取权限列表
     public function list() {
-        $list = Permission::all();
+        $list = Permission::get();
+
+        //dd($list);
         return response()->json(['code'=>20000, 'message'=>'获取成功', 'data'=>$list]);
     }
 

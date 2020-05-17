@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::get('test', 'TestController@index');
 Route::post('user/login', 'LoginController@login')->name('login');
 
-Route::middleware('checktoken')->group(function () {
+Route::middleware('checktoken', 'jsoncors')->group(function () {
     Route::get('user/info', 'UserController@getUserInfo'); //获取用户信息
 
     Route::prefix('permission')->group(function () {

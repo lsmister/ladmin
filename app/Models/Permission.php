@@ -7,12 +7,19 @@ use Illuminate\Support\Arr;
 
 class Permission extends Model
 {
-    protected $visible = ['value', 'label', 'children'];
+    //protected $hidden = ['children'];
+
+    protected $appends = ['parent_label'];
 
     //关联角色 多对多
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_permission');
+    }
+
+    public function getParentLabelAttribute()
+    {
+        return $this->where('id', $this->attributes['parent_id'])->value('description');
     }
 
     public function children()
