@@ -9,6 +9,8 @@ class Permission extends Model
 {
     //protected $hidden = ['children'];
 
+    protected $guarded = ['id'];
+
     protected $appends = ['parent_label'];
 
     //关联角色 多对多

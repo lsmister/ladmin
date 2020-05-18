@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+    protected $guarded = ['id'];
+
     //关联用户 一对多
     public function users()
     {
