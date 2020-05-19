@@ -50,16 +50,19 @@ class PermissionController extends Controller
 
     //更新权限
     public function update($id, Request $request) {
-        dd($request->all());
-        $list = Permission::GetAllMenus();
-        return response()->json(['code'=>20000, 'message'=>'更新成功', 'data'=>$list]);
+        $p = Permission::where('id', $id)->update($request->all());
+        if($p){
+            return response()->json(['code'=>20000, 'message'=>'更新成功', 'data'=>$p]);
+        }
+        return response()->json(['code'=>20000, 'message'=>'更新失败']);
     }
 
     //删除权限
     public function delete($id) {
-        dd($id);
-        $list = Permission::GetAllMenus();
-        return response()->json(['code'=>20000, 'message'=>'删除成功', 'data'=>$list]);
+        if(Permission::destroy($id)) {
+            return response()->json(['code'=>20000, 'message'=>'删除成功']);
+        }
+        return response()->json(['code'=>50000, 'message'=>'删除失败']);
     }
 
     //更新权限状态

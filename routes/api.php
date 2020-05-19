@@ -23,7 +23,7 @@ Route::middleware('checktoken', 'jsoncors')->group(function () {
         Route::get('list', 'PermissionController@list'); //权限列表
         Route::get('menu', 'PermissionController@menu'); //权限菜单
         Route::post('add', 'PermissionController@add'); //添加权限
-        Route::post('update/{id}', 'PermissionController@update'); //更新权限
+        Route::put('update/{id}', 'PermissionController@update'); //更新权限
         Route::delete('delete/{id}', 'PermissionController@delete'); //删除权限
         Route::put('update_status/{id}', 'PermissionController@updateStatus'); //更新权限状态
     });
