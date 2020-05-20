@@ -19,12 +19,12 @@ class UserController extends Controller
         } else {
             $result = [
                 'avatar' => $user->avatar,
-                'introduction' => '',
+                'introduction' => '菜鸟大神',
                 'name' => $user->name,
                 'roles' => [$user->role->name]
             ];
         }
 
-        return response()->json($result);
+        return response()->json(['code'=>20000,'message'=>'获取成功','data'=>$result]);
     }
 }

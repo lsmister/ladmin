@@ -28,6 +28,14 @@ Route::middleware('checktoken', 'jsoncors')->group(function () {
         Route::put('update_status/{id}', 'PermissionController@updateStatus'); //更新权限状态
     });
 
+    Route::prefix('role')->group(function () {
+        Route::get('list', 'RoleController@list'); //角色列表
+        Route::get('permissions', 'RoleController@permissions'); //权限列表
+        Route::post('add', 'RoleController@add'); //添加角色
+        Route::put('update/{id}', 'RoleController@update'); //更新角色
+        Route::delete('delete/{id}', 'RoleController@delete'); //删除角色
+    });
+
 });
 
 
