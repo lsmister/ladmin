@@ -8,6 +8,20 @@ class Role extends Model
 {
     protected $guarded = ['id'];
 
+    protected $appends = ['routes'];
+
+    protected $hidden = ['permissions'];
+
+    public function getRoutesAttribute()
+    {
+        $ps = $this->permissions;
+        if($ps->count() < 1) {
+            return [];
+        }else {
+            return $ps->pluck('id');
+        }
+    }
+
     //关联用户 一对多
     public function users()
     {

@@ -52,7 +52,7 @@ class Permission extends Model
     public static function GetAllMenus2($parent_id = 0)
     {
         $arr = self::query()
-            ->select('id', 'parent_id', 'description as label', 'sort', 'status')
+//            ->select('id', 'parent_id', 'description as label', 'sort', url, 'status')
             ->where('status', 1)
             ->where('parent_id',$parent_id)
             ->orderBy('sort', 'desc')
@@ -65,7 +65,7 @@ class Permission extends Model
     public function children2()
     {
         return $this->hasMany(self::class,'parent_id','id')
-            ->select('id', 'description as label','parent_id', 'sort', 'status')
+//            ->select('id', 'description as label','parent_id', 'sort', 'status')
             ->where('status', 1)
             ->orderBy('sort', 'desc')
             ->with(['children2']);
