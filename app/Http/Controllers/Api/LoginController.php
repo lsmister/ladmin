@@ -4,54 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
-use Earnp\GoogleAuthenticator\Facades\GoogleAuthenticator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Google;
 
 class LoginController extends Controller
 {
-    /*public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['register', 'login']]);
-    }*/
-
-    public function test(Request $request){
-        $ss = GoogleAuthenticator::CreateSecret();
-        dd($ss);
-    }
-
-    /***
-     * 后台管理员注册
-     * @param Request $request
-     */
-    public function register(Request $request)
-    {
-        $name = $request->name;
-        $username = $request->username;
-        $password = $request->password;
-        $check_password = $request->check_password;
-
-        if (!$name || !$password || !$username) {
-            return response()->json(['success' => false, 'message' => '用户名、昵称或密码必填！']);
-        }
-
-        if ($check_password != $password) {
-            return response()->json(['success' => false, 'message' => '两次密码输入不一致！']);
-        }
-
-        $admin = User::where('username', $username)->first();
-        if ($admin) {
-            return response()->json(['success' => false, 'message' => '用户名已被注册！']);
-        }
-
-        $password = Hash::make($password);
-        $admin = User::create([
-            'name' => $name,
-            'password' => $password
-        ]);
-
-        return response()->json(['success' => true, 'message' => '注册成功！', 'admin' => $admin]);
-    }
 
     /***
      * 后台管理员登录
@@ -80,7 +38,8 @@ class LoginController extends Controller
             if(empty($googleCode)) {
                 return response()->json(['code' => 40001, 'message' => '请输入谷歌验证码！']);
             }
-            if(GoogleAuthenticator::CheckCode($user->google_secret, $googleCode)) {
+
+            if(!Google::CheckCode($user->google_secret, $googleCode)) {
                 return response()->json(['code' => 40001, 'message' => '谷歌验证码不正确！']);
             }
         }
@@ -107,7 +66,7 @@ class LoginController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['code'=>20000,'message' => '登出成功']);
     }
 
     /**

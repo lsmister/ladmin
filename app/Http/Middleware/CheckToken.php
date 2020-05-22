@@ -18,10 +18,10 @@ class CheckToken extends BaseMiddleware
     public function handle($request, Closure $next)
     {
         //是否携带 token, 抛出异常:UnauthorizedHttpException
-//        $this->checkForToken($request);
+        $this->checkForToken($request);
 
         //token是否有效, 抛出异常:TokenInvalidException
-        //$user = $this->auth->parseToken()->authenticate();
+        $user = $this->auth->parseToken()->authenticate();
 
         /*$url = substr($request->path(), 3);
         $role = $user->role;

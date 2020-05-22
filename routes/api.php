@@ -17,8 +17,18 @@ Route::get('test', 'TestController@index');
 Route::post('user/login', 'LoginController@login')->name('login');
 
 Route::middleware('checktoken', 'jsoncors')->group(function () {
-    Route::get('user/info', 'UserController@getUserInfo'); //获取用户信息
 
+    Route::post('user/logout', 'LoginController@logout')->name('logout');
+
+    //用户管理
+    Route::prefix('user')->group(function () {
+        Route::get('info', 'UserController@getUserInfo'); //获取用户基本信息
+        Route::get('impinfo', 'UserController@getUserInfoImportant'); //获取用户重要信息
+        Route::put('updateGoogleStatus', 'UserController@updateGoogleStatus'); //获取用户重要信息
+        Route::get('getUserRole', 'UserController@getUserRole'); //获取用户重要信息
+    });
+
+    //权限管理
     Route::prefix('permission')->group(function () {
         Route::get('list', 'PermissionController@list'); //权限列表
         Route::get('menu', 'PermissionController@menu'); //权限菜单
@@ -28,6 +38,7 @@ Route::middleware('checktoken', 'jsoncors')->group(function () {
         Route::put('update_status/{id}', 'PermissionController@updateStatus'); //更新权限状态
     });
 
+    //角色管理
     Route::prefix('role')->group(function () {
         Route::get('list', 'RoleController@list'); //角色列表
         Route::get('permissions', 'RoleController@permissions'); //权限列表
