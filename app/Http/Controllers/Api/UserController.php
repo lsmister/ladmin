@@ -95,6 +95,34 @@ class UserController extends Controller
     public function getUserRole()
     {
         $user = auth()->user();
-        dd($user);
+        $role = $user->role;
+
+        $routes = $role->permissions->toArray();
+        $tree = $this->getTree($routes, 1);
+
+        return response()->json(['code'=>20000,'message'=>'获取成功','data'=>$tree]);
     }
+
+    /**
+     * 路由树
+     */
+    public function getTree($data, $pid)
+    {
+        $tree = [];
+        foreach($data as $k => $v)
+        {
+            if($v['parent_id'] == $pid)
+            {
+                $temp['name'] = $v['description'];
+                $temp['path'] = $v['url'];
+                $temp['component'] = $v['url'];
+                $temp['children'] = $this->getTree($data, $v['id']);
+//                $v['children'] = $this->getTree($data, $v['id']);
+
+                $tree[] = $temp;;
+            }
+        }
+        return $tree;
+    }
+
 }
