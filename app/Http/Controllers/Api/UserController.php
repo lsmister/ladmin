@@ -11,6 +11,31 @@ use Google;
 class UserController extends Controller
 {
     /**
+     * 获取用户列表
+     */
+    public function getList(Request $request)
+    {
+        $model = User::query();
+
+        if($request->filled('name'))  {
+            $model = $model->where('name', 'like', '%'.$request->name.'%');
+        }
+
+        if($request->filled('username'))  {
+            $model = $model->where('username', 'like', '%'.$request->username.'%');
+        }
+
+        if($request->filled('status'))  {
+            $model = $model->where('status', $request->status);
+        }
+
+        $list = $model
+            ->select('id','username','name','google_status','status','created_at','merchant_id')
+            ->paginate($request->limit);
+        return response()->json(['code'=>20000, 'message'=>'获取成功', 'data'=>$list]);
+    }
+
+    /**
      * 获取用户信息 - 基本信息
      * @param Request $request
      */

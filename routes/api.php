@@ -22,6 +22,7 @@ Route::middleware('checktoken', 'jsoncors')->group(function () {
 
     //用户管理
     Route::prefix('user')->group(function () {
+        Route::get('list', 'UserController@getList'); //获取用户列表
         Route::get('info', 'UserController@getUserInfo'); //获取用户基本信息
         Route::get('impinfo', 'UserController@getUserInfoImportant'); //获取用户重要信息
         Route::put('updateGoogleStatus', 'UserController@updateGoogleStatus'); //获取用户重要信息
