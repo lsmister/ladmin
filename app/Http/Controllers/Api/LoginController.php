@@ -17,6 +17,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        //dd($request->all());
         $username = $request->username;
         $password = $request->password;
         $googleCode = $request->googleCode;
@@ -34,11 +35,16 @@ class LoginController extends Controller
             return response()->json(['code' => 40001, 'message' => '密码错误！']);
         }
 
+        if($user->status == 0) {
+            return response()->json(['code' => 40001, 'message' => '用户已被禁用！']);
+        }
+
         if($user->google_status == 1) {
             if(empty($googleCode)) {
                 return response()->json(['code' => 40001, 'message' => '请输入谷歌验证码！']);
             }
 
+            //dd(Google::CheckCode($user->google_secret, $googleCode));
             if(!Google::CheckCode($user->google_secret, $googleCode)) {
                 return response()->json(['code' => 40001, 'message' => '谷歌验证码不正确！']);
             }

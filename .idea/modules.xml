@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ladmin.iml" filepath="$PROJECT_DIR$/.idea/ladmin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../vuetemp/.idea/vuetemp.iml" filepath="$PROJECT_DIR$/../vuetemp/.idea/vuetemp.iml" />
       <module fileurl="file://$PROJECT_DIR$/../vuetemplate/.idea/vuetemplate.iml" filepath="$PROJECT_DIR$/../vuetemplate/.idea/vuetemplate.iml" />
     </modules>
   </component>

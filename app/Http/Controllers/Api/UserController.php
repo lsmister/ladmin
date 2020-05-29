@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Role;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -30,8 +31,18 @@ class UserController extends Controller
         }
 
         $list = $model
-            ->select('id','username','name','google_status','status','created_at','merchant_id')
+            ->select('id','username','name','google_status','status','created_at','merchant_id','role_id')
             ->paginate($request->limit);
+
+        return response()->json(['code'=>20000, 'message'=>'获取成功', 'data'=>$list]);
+    }
+
+    /**
+     * 角色列表
+     */
+    public function getRoleList()
+    {
+        $list = Role::select('id','name')->get()->makeHidden('routes');
         return response()->json(['code'=>20000, 'message'=>'获取成功', 'data'=>$list]);
     }
 
@@ -148,6 +159,20 @@ class UserController extends Controller
             }
         }
         return $tree;
+    }
+
+    //更新权限状态
+    public function updateStatus($id, Request $request)
+    {
+        //dd($request->all());
+        $p = User::find($id);
+        if(!$p) {
+            return response()->json(['code'=>50000, 'message'=>'用户不存在']);
+        }
+        $p->status = $request->status;
+        $p->save();
+
+        return response()->json(['code'=>20000, 'message'=>'操作成功']);
     }
 
 }
