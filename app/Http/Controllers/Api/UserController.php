@@ -161,7 +161,42 @@ class UserController extends Controller
         return $tree;
     }
 
-    //更新权限状态
+    //添加用户
+    public function add(Request $request) {
+        $data = $request->all();
+        //dd($data);
+        $data['parent_id'] = auth()->id();
+
+        if(User::where('name', $data['name'])->first()) {
+            return response()->json(['code'=>50000, 'message'=>'用户名称已存在, 请更换!']);
+        }
+
+        $p = User::create($data);
+        if($p) {
+            return response()->json(['code'=>20000, 'message'=>'添加成功', 'data'=>$p]);
+        }
+
+        return response()->json(['code'=>50000, 'message'=>'添加失败']);
+    }
+
+    //更新用户
+    public function update($id, Request $request) {
+        $p = User::where('id', $id)->update($request->all());
+        if($p){
+            return response()->json(['code'=>20000, 'message'=>'更新成功', 'data'=>$p]);
+        }
+        return response()->json(['code'=>20000, 'message'=>'更新失败']);
+    }
+
+    //删除用户
+    public function delete($id) {
+        if(User::destroy($id)) {
+            return response()->json(['code'=>20000, 'message'=>'删除成功']);
+        }
+        return response()->json(['code'=>50000, 'message'=>'删除失败']);
+    }
+
+    //更新用户状态
     public function updateStatus($id, Request $request)
     {
         //dd($request->all());

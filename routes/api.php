@@ -25,6 +25,9 @@ Route::middleware('checktoken', 'jsoncors')->group(function () {
         Route::get('list', 'UserController@getList'); //获取用户列表
         Route::get('rolelist', 'UserController@getRoleList'); //获取用户列表
         Route::get('info', 'UserController@getUserInfo'); //获取用户基本信息
+        Route::post('add', 'UserController@add'); //添加用户
+        Route::put('update/{id}', 'UserController@update'); //更新用户
+        Route::delete('delete/{id}', 'UserController@delete'); //删除用户
         Route::get('impinfo', 'UserController@getUserInfoImportant'); //获取用户重要信息
         Route::put('updateGoogleStatus', 'UserController@updateGoogleStatus'); //获取用户重要信息
         Route::get('getUserRole', 'UserController@getUserRole'); //获取用户重要信息
