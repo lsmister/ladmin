@@ -161,7 +161,7 @@ class UserController extends Controller
         return $tree;
     }
 
-    //更新权限状态
+    //更新用户状态
     public function updateStatus($id, Request $request)
     {
         //dd($request->all());
