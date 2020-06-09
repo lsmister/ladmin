@@ -8,6 +8,8 @@ use App\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Google;
+use Hash;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -164,8 +166,17 @@ class UserController extends Controller
     //添加用户
     public function add(Request $request) {
         $data = $request->all();
-        //dd($data);
         $data['parent_id'] = auth()->id();
+        $data['password'] = Hash::make($data['password']);
+        if(empty($data['avatar'])) {
+            $rand = mt_rand(1, 14);
+            $data['avatar'] = config('app.url').'/images/user/'.$rand.'-avatar.jpeg';
+        }else {
+            $data['avatar'] = config('app.url').'/images/user/'.$data['avatar'];
+        }
+        $lastid = User::orderBy('merchant_id', 'desc')->value('merchant_id');
+        $data['merchant_id'] = $lastid + 1;
+        $data['merchant_key'] = Str::random(32);
 
         if(User::where('name', $data['name'])->first()) {
             return response()->json(['code'=>50000, 'message'=>'用户名称已存在, 请更换!']);
